@@ -115,11 +115,13 @@ cmd.send = function (chestMsg) {
  * @returns {Object[]} The list of commands.
  */
 exports.busCommands = function () {
+  var rc   = require ('./rc.json');
   var list = [];
 
   Object.keys (cmd).forEach (function (action) {
     list.push ({
       name   : action,
+      desc   : rc[action] || '',
       handler: cmd[action]
     });
   });
