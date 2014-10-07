@@ -1,0 +1,6 @@
+{
+  "start"  : "Start a chest server",
+  "stop"   : "Stop the chest server",
+  "restart": "Restart the chest server",
+  "send"   : "Send a file to the chest"
+}
