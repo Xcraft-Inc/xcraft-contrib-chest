@@ -2,17 +2,18 @@
 
 var moduleName = 'chest';
 
+var path      = require ('path');
 var fs        = require ('fs');
 var zogLog    = require ('xcraft-core-log') (moduleName);
 var busClient = require ('xcraft-core-busclient');
+var chestConfig = require ('xcraft-core-etc').loadConfigFileForPackage ('xcraft-contrib-chest');
 
 var cmd = {};
 
 /**
  * Start the chest server.
  */
-cmd.start = function (chestMsg) {
-  var chestConfig = chestMsg.data.config;
+cmd.start = function () {
   var spawn = require ('child_process').spawn;
   var isRunning = false;
 
@@ -61,8 +62,7 @@ cmd.start = function (chestMsg) {
 /**
  * Stop the chest server.
  */
-cmd.stop = function (chestMsg) {
-  var chestConfig = chestMsg.data.config;
+cmd.stop = function () {
   try {
     var pid = fs.readFileSync (chestConfig.pid, 'utf8');
     process.kill (pid, 'SIGTERM');
@@ -92,8 +92,6 @@ cmd.restart = function () {
  */
 cmd.send = function (chestMsg) {
   var file = chestMsg.data.file;
-  var chestConfig = chestMsg.data.config;
-
   var path = require ('path');
 
   file = path.resolve (file);
