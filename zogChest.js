@@ -38,7 +38,7 @@ cmd.start = function () {
     var logout = fs.openSync (chestConfig.log, 'a');
     var logerr = fs.openSync (chestConfig.log, 'a');
     var launcher = [
-      './node_modules/xcraft-contrib-chest/chest/chestServer.js',
+      path.resolve (__dirname, './chest/chestServer.js'),
       chestConfig.host,
       chestConfig.port,
       chestConfig.repository
