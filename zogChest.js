@@ -6,7 +6,7 @@ var path      = require ('path');
 var fs        = require ('fs');
 var zogLog    = require ('xcraft-core-log') (moduleName);
 var busClient = require ('xcraft-core-busclient');
-var chestConfig = require ('xcraft-core-etc').loadConfigFileForPackage ('xcraft-contrib-chest');
+var chestConfig = require ('xcraft-core-etc').load ('xcraft-contrib-chest');
 
 var cmd = {};
 
