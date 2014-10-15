@@ -10,19 +10,12 @@ var app       = express ();
 var server    = require ('http').Server (app);
 var zogFs     = require ('xcraft-core-fs');
 var zogLog    = require ('xcraft-core-log') (moduleName);
-
-
-var launchArgv = process.argv;
-var config = {
-  host : launchArgv[2],
-  port : launchArgv[3],
-  repository : launchArgv[4]
-};
-
 zogLog.verbosity (0);
 zogLog.color (false);
 zogLog.datetime (true);
 
+
+var config    = require ('xcraft-core-etc').load ('xcraft-contrib-chest');
 zogLog.verb ('settings:');
 zogLog.verb ('- host: ' + config.host);
 zogLog.verb ('- port: ' + config.port);
