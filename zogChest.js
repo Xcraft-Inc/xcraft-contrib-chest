@@ -121,8 +121,8 @@ exports.xcraftCommands = function () {
   Object.keys (cmd).forEach (function (action) {
     list.push ({
       name   : action,
-      desc   : rc[action] ? rc[action].desc : '',
-      params : rc[action] ? rc[action].params : '',
+      desc   : rc[action] ? rc[action].desc   : null,
+      params : rc[action] ? rc[action].params : null,
       handler: cmd[action]
     });
   });

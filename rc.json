@@ -1,6 +1,6 @@
 {
-  "start"  : {"params": "", "desc": "Start a chest server"},
-  "stop"   : {"params": "", "desc": "Stop the chest server"},
-  "restart": {"params": "", "desc": "Restart the chest server"},
-  "send"   : {"params": ":file", "desc": "Send a file to the chest"}
+  "start"  : {"params": null,     "desc": "start the chest server"},
+  "stop"   : {"params": null,     "desc": "stop the chest server"},
+  "restart": {"params": null,     "desc": "restart the chest server"},
+  "send"   : {"params": "<file>", "desc": "send a file to the chest server"}
 }
