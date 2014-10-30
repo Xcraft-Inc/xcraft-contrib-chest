@@ -108,6 +108,10 @@ cmd.send = function (chestMsg) {
   });
 };
 
+exports.client = function () {
+  return require ('./chest/chestClient.js');
+};
+
 /**
  * Retrieve the list of available commands.
  * @returns {Object[]} The list of commands.
