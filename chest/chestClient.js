@@ -13,8 +13,7 @@ var chestUpload = function (inputFile, server, port, callback) {
   var protocol = parseInt (port) === 443 ? 'https' : 'http';
   var length = fs.statSync (inputFile).size;
   var remoteUri = protocol + '://' + server + ':' + port;
-  var options =
-  {
+  var options = {
     uri: remoteUri + '/upload',
     method: 'POST',
     strictSSL: false,
@@ -38,8 +37,7 @@ var chestUpload = function (inputFile, server, port, callback) {
   /* FIXME: it should be a socket.io-client option. */
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-  var socket = require ('socket.io-client') (remoteUri,
-  {
+  var socket = require ('socket.io-client') (remoteUri, {
     reconnection: false
   });
 
