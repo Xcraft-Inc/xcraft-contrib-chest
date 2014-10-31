@@ -23,7 +23,7 @@ zogLog.verb ('- repository: ' + config.repository);
 
 zogLog.info ('the chest server is listening');
 
-var socketList = [];
+var socketList = {};
 
 app.get ('/', function (req, res) {
   res.send ('The zog chest server');
