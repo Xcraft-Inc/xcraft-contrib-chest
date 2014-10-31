@@ -38,7 +38,8 @@ var chestUpload = function (inputFile, server, port, callback) {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
   var socket = require ('socket.io-client') (remoteUri, {
-    reconnection: false
+    reconnection: false,
+    multiplex: false
   });
 
   socket.on ('connect', function () {
