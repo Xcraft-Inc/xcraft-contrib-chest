@@ -91,6 +91,7 @@ io.on ('connection', function (socket) {
      */
     Object.keys (socketList).some (function (item) {
       if (socketList[item] === socket) {
+        zogLog.verb ('delete socket for ' + item);
         delete socketList[item];
         return false;
       }
