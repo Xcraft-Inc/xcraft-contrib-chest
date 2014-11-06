@@ -10,7 +10,7 @@ var app       = express ();
 var server    = require ('http').Server (app);
 var zogFs     = require ('xcraft-core-fs');
 var zogLog    = require ('xcraft-core-log') (moduleName);
-zogLog.verbosity (0);
+zogLog.verbosity (process.env.XCRAFT_LOG ? parseInt (process.env.XCRAFT_LOG) : 2);
 zogLog.color (false);
 zogLog.datetime (true);
 
