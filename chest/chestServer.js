@@ -9,7 +9,7 @@ var express = require ('express');
 var app    = express ();
 var server = require ('http').Server (app);
 
-var zogFs = require ('xcraft-core-fs');
+var xFs  = require ('xcraft-core-fs');
 var xLog = require ('xcraft-core-log') (moduleName);
 
 xLog.verbosity (process.env.XCRAFT_LOG ? parseInt (process.env.XCRAFT_LOG) : 2);
@@ -36,7 +36,7 @@ app.use ('/resources', express.static (config.repository));
 app.post ('/upload', function (req, res) {
   var file = req.headers['zog-upload-filename'];
 
-  zogFs.mkdir (config.repository);
+  xFs.mkdir (config.repository);
 
   var repoFile = path.join (config.repository, file);
   var wstream = fs.createWriteStream (repoFile);
