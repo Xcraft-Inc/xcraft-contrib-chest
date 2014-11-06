@@ -81,10 +81,15 @@ cmd.stop = function () {
  * Restart the chest server.
  */
 cmd.restart = function () {
-  cmd.stop ();
-  cmd.start ();
+  busClient.events.subscribe ('chest.start.finished', function () {
+    busClient.events.send ('chest.restart.finished');
+  });
 
-  busClient.events.send ('chest.restart.finished');
+  busClient.events.subscribe ('chest.stop.finished', function () {
+    busClient.command.send ('chest.start');
+  });
+
+  busClient.command.send ('chest.stop');
 };
 
 /**
