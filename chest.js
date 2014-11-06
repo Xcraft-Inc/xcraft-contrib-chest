@@ -2,10 +2,11 @@
 
 var moduleName = 'chest';
 
-var path      = require ('path');
-var fs        = require ('fs');
-var zogLog    = require ('xcraft-core-log') (moduleName);
-var busClient = require ('xcraft-core-busclient');
+var path = require ('path');
+var fs   = require ('fs');
+
+var xLog        = require ('xcraft-core-log') (moduleName);
+var busClient   = require ('xcraft-core-busclient');
 var chestConfig = require ('xcraft-core-etc').load ('xcraft-contrib-chest');
 
 var cmd = {};
@@ -18,7 +19,7 @@ cmd.start = function () {
   var isRunning = false;
 
   if (fs.existsSync (chestConfig.pid)) {
-    zogLog.warn ('the chest server seems running');
+    xLog.warn ('the chest server seems running');
 
     isRunning = true;
     var pid = fs.readFileSync (chestConfig.pid, 'utf8');
@@ -27,7 +28,7 @@ cmd.start = function () {
       process.kill (pid, 0);
     } catch (err) {
       if (err.code === 'ESRCH') {
-        zogLog.warn ('but the process can not be found, then we try to start it');
+        xLog.warn ('but the process can not be found, then we try to start it');
         fs.unlinkSync (chestConfig.pid);
         isRunning = false;
       }
@@ -50,7 +51,7 @@ cmd.start = function () {
       stdio: ['ignore', logout, logerr]
     });
 
-    zogLog.verb ('chest server PID: ' + chest.pid);
+    xLog.verb ('chest server PID: ' + chest.pid);
     fs.writeFileSync (chestConfig.pid, chest.pid);
 
     chest.unref ();
@@ -69,7 +70,7 @@ cmd.stop = function () {
     fs.unlinkSync (chestConfig.pid);
   } catch (err) {
     if (err.code !== 'ENOENT') {
-      zogLog.err (err);
+      xLog.err (err);
     }
   }
 
@@ -96,12 +97,12 @@ cmd.send = function (chestMsg) {
 
   file = path.resolve (file);
 
-  zogLog.info ('send ' + file + ' to the chest');
+  xLog.info ('send ' + file + ' to the chest');
 
   var chestClient = require ('./chest/chestClient.js');
   chestClient.upload (file, chestConfig, function (error) {
     if (error) {
-      zogLog.err (error);
+      xLog.err (error);
     }
 
     busClient.events.send ('chest.send.finished');

@@ -1,7 +1,9 @@
 'use strict';
 
 var moduleName = 'chest';
-var zogLog    = require ('xcraft-core-log') (moduleName);
+
+var xLog = require ('xcraft-core-log') (moduleName);
+
 
 var chestUpload = function (inputFile, server, port, callback) {
   var fs             = require ('fs');
@@ -43,7 +45,7 @@ var chestUpload = function (inputFile, server, port, callback) {
   });
 
   socket.on ('connect', function () {
-    zogLog.verb ('connected to the chest server');
+    xLog.verb ('connected to the chest server');
 
     /* We inform the server that we will upload something. */
     socket.emit ('register', path.basename (inputFile));
@@ -52,7 +54,7 @@ var chestUpload = function (inputFile, server, port, callback) {
       if (!bar.complete) {
         bar.terminate ();
       }
-      zogLog.verb ('disconnected from the chest server');
+      xLog.verb ('disconnected from the chest server');
 
       callback ();
     });
@@ -67,7 +69,7 @@ var chestUpload = function (inputFile, server, port, callback) {
         return;
       }
 
-      zogLog.info ('begin file upload');
+      xLog.info ('begin file upload');
 
       var progressCalc = progressStream ({length: length});
 
@@ -84,14 +86,14 @@ var chestUpload = function (inputFile, server, port, callback) {
         }
 
         if (body) {
-          zogLog.verb (body);
+          xLog.verb (body);
         }
       });
 
       stream.on ('end', function () {
-        zogLog.info ('transfer average speed: %d [Mbps]',
+        xLog.info ('transfer average speed: %d [Mbps]',
                      parseInt (progressSpeed * 8 / 1000) / 1000);
-        zogLog.info ('the uploaded file is synchronizing in the repository...');
+        xLog.info ('the uploaded file is synchronizing in the repository...');
       });
 
       /* Send the file to the server. */

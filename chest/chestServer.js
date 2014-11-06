@@ -2,26 +2,28 @@
 
 var moduleName = 'chest';
 
-var fs        = require ('fs');
-var path      = require ('path');
-var express   = require ('express');
+var fs      = require ('fs');
+var path    = require ('path');
+var express = require ('express');
 
-var app       = express ();
-var server    = require ('http').Server (app);
-var zogFs     = require ('xcraft-core-fs');
-var zogLog    = require ('xcraft-core-log') (moduleName);
-zogLog.verbosity (process.env.XCRAFT_LOG ? parseInt (process.env.XCRAFT_LOG) : 2);
-zogLog.color (false);
-zogLog.datetime (true);
+var app    = express ();
+var server = require ('http').Server (app);
+
+var zogFs = require ('xcraft-core-fs');
+var xLog = require ('xcraft-core-log') (moduleName);
+
+xLog.verbosity (process.env.XCRAFT_LOG ? parseInt (process.env.XCRAFT_LOG) : 2);
+xLog.color (false);
+xLog.datetime (true);
 
 
 var config    = require ('xcraft-core-etc').load ('xcraft-contrib-chest');
-zogLog.verb ('settings:');
-zogLog.verb ('- host: ' + config.host);
-zogLog.verb ('- port: ' + config.port);
-zogLog.verb ('- repository: ' + config.repository);
+xLog.verb ('settings:');
+xLog.verb ('- host: ' + config.host);
+xLog.verb ('- port: ' + config.port);
+xLog.verb ('- repository: ' + config.repository);
 
-zogLog.info ('the chest server is listening');
+xLog.info ('the chest server is listening');
 
 var socketList = {};
 
@@ -39,7 +41,7 @@ app.post ('/upload', function (req, res) {
   var repoFile = path.join (config.repository, file);
   var wstream = fs.createWriteStream (repoFile);
 
-  zogLog.info ('start a file upload: %s (%d bytes)',
+  xLog.info ('start a file upload: %s (%d bytes)',
                file, req.headers['content-length']);
 
   req.pipe (wstream);
@@ -50,7 +52,7 @@ app.post ('/upload', function (req, res) {
 
     /* The transmission is terminated, then we eject the client. */
     socketList[file].disconnect ();
-    zogLog.info ('end of file upload: %s', file);
+    xLog.info ('end of file upload: %s', file);
   });
 
   req.on ('error', function (err) {
@@ -58,22 +60,22 @@ app.post ('/upload', function (req, res) {
       socketList[file].disconnect ();
     }
 
-    zogLog.err (err.message);
+    xLog.err (err.message);
   });
 });
 
 var io = require ('socket.io') (server);
 
 io.on ('connection', function (socket) {
-  zogLog.verb ('open the connection on the chest server');
+  xLog.verb ('open the connection on the chest server');
 
   /* Handle the new client connections. */
   socket.on ('register', function (data) {
-    zogLog.verb ('try to register a new client for ' + data);
+    xLog.verb ('try to register a new client for ' + data);
 
     /* Only one client at a time can send a specific file. */
     if (socketList.hasOwnProperty (data)) {
-      zogLog.warn ('a socket is already open for ' + data);
+      xLog.warn ('a socket is already open for ' + data);
 
       socket.emit ('registered', 'a socket is already open for ' + data);
       socket.disconnect ();
@@ -91,7 +93,7 @@ io.on ('connection', function (socket) {
      */
     Object.keys (socketList).some (function (item) {
       if (socketList[item] === socket) {
-        zogLog.verb ('delete socket for ' + item);
+        xLog.verb ('delete socket for ' + item);
         delete socketList[item];
         return false;
       }
