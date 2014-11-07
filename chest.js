@@ -82,10 +82,12 @@ cmd.stop = function () {
  */
 cmd.restart = function () {
   busClient.events.subscribe ('chest.start.finished', function () {
+    busClient.events.unsubscribe ('chest.start.finished');
     busClient.events.send ('chest.restart.finished');
   });
 
   busClient.events.subscribe ('chest.stop.finished', function () {
+    busClient.events.unsubscribe ('chest.stop.finished');
     busClient.command.send ('chest.start');
   });
 
