@@ -28,13 +28,13 @@ xLog.info ('the chest server is listening');
 var socketList = {};
 
 app.get ('/', function (req, res) {
-  res.send ('The zog chest server');
+  res.send ('The Xcraft chest server');
 });
 
 app.use ('/resources', express.static (config.repository));
 
 app.post ('/upload', function (req, res) {
-  var file = req.headers['zog-upload-filename'];
+  var file = req.headers['xcraft-upload-filename'];
 
   xFs.mkdir (config.repository);
 

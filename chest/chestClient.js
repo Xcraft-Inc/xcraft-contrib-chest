@@ -23,7 +23,7 @@ var chestUpload = function (inputFile, server, port, callback) {
       'Content-Type': 'application/octet-stream',
       'Content-Length': length.toString (),
       'Transfer-Encoding': 'chunked',
-      'Zog-Upload-Filename': path.basename (inputFile)
+      'Xcraft-Upload-Filename': path.basename (inputFile)
     }
   };
 
