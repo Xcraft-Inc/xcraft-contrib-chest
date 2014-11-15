@@ -29,6 +29,6 @@
     "xcraft-core-log": "0.1.0"
   },
   "author": "Mathieu Schroeter",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {}
 }
