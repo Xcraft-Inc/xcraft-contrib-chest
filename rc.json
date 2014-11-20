@@ -1,18 +1,19 @@
 {
   "start": {
-    "params": null,
     "desc": "start the chest server"
   },
   "stop": {
-    "params": null,
     "desc": "stop the chest server"
   },
   "restart": {
-    "params": null,
     "desc": "restart the chest server"
   },
   "send": {
-    "params": "file",
-    "desc": "send a file to the chest server"
+    "desc": "send a file to the chest server",
+    "options": {
+      "params": {
+        "required": "file"
+      }
+    }
   }
 }
