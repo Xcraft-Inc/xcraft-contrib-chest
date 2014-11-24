@@ -96,6 +96,7 @@ cmd.restart = function () {
 
 /**
  * Send a file to the chest server.
+ *
  * @param {Object} chestMsg
  */
 cmd.send = function (chestMsg) {
@@ -118,6 +119,7 @@ cmd.send = function (chestMsg) {
 
 /**
  * Retrieve the list of available commands.
+ *
  * @returns {Object[]} The list of commands.
  */
 exports.xcraftCommands = function () {
