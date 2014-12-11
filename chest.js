@@ -39,7 +39,7 @@ cmd.start = function () {
     var logout = fs.openSync (chestConfig.log, 'a');
     var logerr = fs.openSync (chestConfig.log, 'a');
     var launcher = [
-      path.resolve (__dirname, './chest/chestServer.js'),
+      path.resolve (__dirname, './lib/server.js'),
       chestConfig.host,
       chestConfig.port,
       chestConfig.repository
@@ -107,7 +107,7 @@ cmd.send = function (chestMsg) {
 
   xLog.info ('send ' + file + ' to the chest');
 
-  var chestClient = require ('./chest/chestClient.js');
+  var chestClient = require ('./lib/client.js');
   chestClient.upload (file, chestConfig, function (error) {
     if (error) {
       xLog.err (error);
