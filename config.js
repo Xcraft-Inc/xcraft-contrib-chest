@@ -7,7 +7,7 @@ module.exports = [{
   type: 'input',
   name: 'host',
   message: 'hostname or IP [client or server]:',
-  default: '127.0.0.1'
+  default: 'wpkg.epsitec.ch'
 }, {
   type: 'input',
   name: 'port',
@@ -15,7 +15,7 @@ module.exports = [{
   validate: function (value) {
     return /^[0-9]{1,}$/.test (value);
   },
-  default: '8080'
+  default: '443'
 }, {
   type: 'input',
   name: 'pid',
