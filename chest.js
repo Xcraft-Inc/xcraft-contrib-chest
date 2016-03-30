@@ -7,7 +7,7 @@ var fs   = require ('fs');
 
 var xLog        = require ('xcraft-core-log') (moduleName);
 var busClient   = require ('xcraft-core-busclient').getGlobal ();
-var chestConfig = require ('xcraft-core-etc').load ('xcraft-contrib-chest');
+var chestConfig = require ('xcraft-core-etc') ().load ('xcraft-contrib-chest');
 
 var cmd = {};
 
