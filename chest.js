@@ -1,25 +1,22 @@
 'use strict';
 
-var moduleName = 'chest';
-
 var path = require ('path');
 var fs   = require ('fs');
 
-var xLog        = require ('xcraft-core-log') (moduleName);
-var busClient   = require ('xcraft-core-busclient').getGlobal ();
-var chestConfig = require ('xcraft-core-etc') ().load ('xcraft-contrib-chest');
 
 var cmd = {};
 
 /**
  * Start the chest server.
  */
-cmd.start = function () {
+cmd.start = function (msg, response) {
+  const chestConfig = require ('xcraft-core-etc') (null, response).load ('xcraft-contrib-chest');
+
   var spawn = require ('child_process').spawn;
   var isRunning = false;
 
   if (fs.existsSync (chestConfig.pid)) {
-    xLog.warn ('the chest server seems running');
+    response.log.warn ('the chest server seems running');
 
     isRunning = true;
     var pid = fs.readFileSync (chestConfig.pid, 'utf8');
@@ -28,7 +25,7 @@ cmd.start = function () {
       process.kill (pid, 0);
     } catch (err) {
       if (err.code === 'ESRCH') {
-        xLog.warn ('but the process can not be found, then we try to start it');
+        response.log.warn ('but the process can not be found, then we try to start it');
         fs.unlinkSync (chestConfig.pid);
         isRunning = false;
       }
@@ -51,69 +48,73 @@ cmd.start = function () {
       stdio: ['ignore', logout, logerr]
     });
 
-    xLog.verb ('chest server PID: ' + chest.pid);
+    response.log.verb ('chest server PID: ' + chest.pid);
     fs.writeFileSync (chestConfig.pid, chest.pid);
 
     chest.unref ();
   }
 
-  busClient.events.send ('chest.start.finished');
+  response.events.send ('chest.start.finished');
 };
 
 /**
  * Stop the chest server.
  */
-cmd.stop = function () {
+cmd.stop = function (msg, response) {
+  const chestConfig = require ('xcraft-core-etc') (null, response).load ('xcraft-contrib-chest');
+
   try {
     var pid = fs.readFileSync (chestConfig.pid, 'utf8');
     process.kill (pid, 'SIGTERM');
     fs.unlinkSync (chestConfig.pid);
   } catch (err) {
     if (err.code !== 'ENOENT') {
-      xLog.err (err);
+      response.log.err (err);
     }
   }
 
-  busClient.events.send ('chest.stop.finished');
+  response.events.send ('chest.stop.finished');
 };
 
 /**
  * Restart the chest server.
  */
-cmd.restart = function () {
-  busClient.events.subscribe ('chest.start.finished', function () {
-    busClient.events.unsubscribe ('chest.start.finished');
-    busClient.events.send ('chest.restart.finished');
+cmd.restart = function (msg, response) {
+  response.events.subscribe ('chest.start.finished', function () {
+    response.events.unsubscribe ('chest.start.finished');
+    response.events.send ('chest.restart.finished');
   });
 
-  busClient.events.subscribe ('chest.stop.finished', function () {
-    busClient.events.unsubscribe ('chest.stop.finished');
-    busClient.command.send ('chest.start');
+  response.events.subscribe ('chest.stop.finished', function () {
+    response.events.unsubscribe ('chest.stop.finished');
+    response.command.send ('chest.start');
   });
 
-  busClient.command.send ('chest.stop');
+  response.command.send ('chest.stop');
 };
 
 /**
  * Send a file to the chest server.
  *
- * @param {Object} chestMsg
+ * @param {Object} msg
  */
-cmd.send = function (chestMsg) {
-  var file = chestMsg.data.file;
+cmd.send = function (msg, response) {
+  const chestConfig = require ('xcraft-core-etc') (null, response).load ('xcraft-contrib-chest');
+
+  var file = msg.data.file;
   var path = require ('path');
 
   file = path.resolve (file);
 
-  xLog.info ('send ' + file + ' to the chest');
+  response.log.info ('send ' + file + ' to the chest');
 
   var chestClient = require ('./lib/client.js');
-  chestClient.upload (file, chestConfig, function (error) {
+  chestClient.upload (file, chestConfig, response, function (error) {
     if (error) {
-      xLog.err (error);
+      response.log.err (error);
     }
 
-    busClient.events.send ('chest.send.finished');
+    response.events.send ('chest.send.finished');
   });
 };
 
@@ -123,8 +124,9 @@ cmd.send = function (chestMsg) {
  * @returns {Object} The list and definitions of commands.
  */
 exports.xcraftCommands = function () {
+  const xUtils = require ('xcraft-core-utils');
   return {
     handlers: cmd,
-    rc: path.join (__dirname, './rc.json')
+    rc: xUtils.json.fromFile (path.join (__dirname, './rc.json'))
   };
 };
