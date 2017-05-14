@@ -1,8 +1,7 @@
 'use strict';
 
 var path = require ('path');
-var fs   = require ('fs');
-
+var fs = require ('fs');
 
 var cmd = {};
 
@@ -10,7 +9,9 @@ var cmd = {};
  * Start the chest server.
  */
 cmd.start = function (msg, response) {
-  const chestConfig = require ('xcraft-core-etc') (null, response).load ('xcraft-contrib-chest');
+  const chestConfig = require ('xcraft-core-etc') (null, response).load (
+    'xcraft-contrib-chest'
+  );
 
   var spawn = require ('child_process').spawn;
   var isRunning = false;
@@ -25,7 +26,9 @@ cmd.start = function (msg, response) {
       process.kill (pid, 0);
     } catch (err) {
       if (err.code === 'ESRCH') {
-        response.log.warn ('but the process can not be found, then we try to start it');
+        response.log.warn (
+          'but the process can not be found, then we try to start it'
+        );
         fs.unlinkSync (chestConfig.pid);
         isRunning = false;
       }
@@ -39,13 +42,12 @@ cmd.start = function (msg, response) {
       path.resolve (__dirname, './lib/server.js'),
       chestConfig.host,
       chestConfig.port,
-      chestConfig.repository
+      chestConfig.repository,
     ];
 
-    var chest = spawn ('node', launcher,
-    {
+    var chest = spawn ('node', launcher, {
       detached: true,
-      stdio: ['ignore', logout, logerr]
+      stdio: ['ignore', logout, logerr],
     });
 
     response.log.verb ('chest server PID: ' + chest.pid);
@@ -61,7 +63,9 @@ cmd.start = function (msg, response) {
  * Stop the chest server.
  */
 cmd.stop = function (msg, response) {
-  const chestConfig = require ('xcraft-core-etc') (null, response).load ('xcraft-contrib-chest');
+  const chestConfig = require ('xcraft-core-etc') (null, response).load (
+    'xcraft-contrib-chest'
+  );
 
   try {
     var pid = fs.readFileSync (chestConfig.pid, 'utf8');
@@ -99,7 +103,9 @@ cmd.restart = function (msg, response) {
  * @param {Object} msg
  */
 cmd.send = function (msg, response) {
-  const chestConfig = require ('xcraft-core-etc') (null, response).load ('xcraft-contrib-chest');
+  const chestConfig = require ('xcraft-core-etc') (null, response).load (
+    'xcraft-contrib-chest'
+  );
 
   var file = msg.data.file;
   var path = require ('path');
@@ -127,6 +133,6 @@ exports.xcraftCommands = function () {
   const xUtils = require ('xcraft-core-utils');
   return {
     handlers: cmd,
-    rc: xUtils.json.fromFile (path.join (__dirname, './rc.json'))
+    rc: xUtils.json.fromFile (path.join (__dirname, './rc.json')),
   };
 };
