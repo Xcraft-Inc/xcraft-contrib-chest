@@ -130,9 +130,27 @@ cmd.send = function (msg, response) {
  * @returns {Object} The list and definitions of commands.
  */
 exports.xcraftCommands = function () {
-  const xUtils = require ('xcraft-core-utils');
   return {
     handlers: cmd,
-    rc: xUtils.json.fromFile (path.join (__dirname, './rc.json')),
+    rc: {
+      start: {
+        desc: 'start the chest server',
+      },
+      stop: {
+        desc: 'stop the chest server',
+      },
+      restart: {
+        desc: 'restart the chest server',
+      },
+      send: {
+        parallelizable: 'true',
+        desc: 'send a file to the chest server',
+        options: {
+          params: {
+            required: 'file',
+          },
+        },
+      },
+    },
   };
 };

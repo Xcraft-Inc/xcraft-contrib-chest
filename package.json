@@ -16,6 +16,11 @@
     "type": "file",
     "url": "lib/xcraft-contrib-chest"
   },
+  "config": {
+    "xcraft": {
+      "commands": true
+    }
+  },
   "dependencies": {
     "express": "^4.13.1",
     "progress": "^1.1.8",
