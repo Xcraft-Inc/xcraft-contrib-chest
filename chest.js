@@ -143,7 +143,7 @@ exports.xcraftCommands = function () {
         desc: 'restart the chest server',
       },
       send: {
-        parallelizable: 'true',
+        parallel: 'true',
         desc: 'send a file to the chest server',
         options: {
           params: {
