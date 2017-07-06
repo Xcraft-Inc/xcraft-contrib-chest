@@ -56,7 +56,7 @@ cmd.start = function (msg, response) {
     chest.unref ();
   }
 
-  response.events.send ('chest.start.finished');
+  response.events.send (`chest.start.${msg.id}.finished`);
 };
 
 /**
@@ -77,20 +77,20 @@ cmd.stop = function (msg, response) {
     }
   }
 
-  response.events.send ('chest.stop.finished');
+  response.events.send (`chest.stop.${msg.id}.finished`);
 };
 
 /**
  * Restart the chest server.
  */
 cmd.restart = function (msg, response) {
-  response.events.subscribe ('chest.start.finished', function () {
-    response.events.unsubscribe ('chest.start.finished');
-    response.events.send ('chest.restart.finished');
+  response.events.subscribe (`chest.start.${msg.id}.finished`, function () {
+    response.events.unsubscribe (`chest.start.${msg.id}.finished`);
+    response.events.send (`chest.restart.${msg.id}.finished`);
   });
 
-  response.events.subscribe ('chest.stop.finished', function () {
-    response.events.unsubscribe ('chest.stop.finished');
+  response.events.subscribe (`chest.stop.${msg.id}.finished`, function () {
+    response.events.unsubscribe (`chest.stop.${msg.id}.finished`);
     response.command.send ('chest.start');
   });
 
@@ -120,7 +120,7 @@ cmd.send = function (msg, response) {
       response.log.err (error);
     }
 
-    response.events.send ('chest.send.finished');
+    response.events.send (`chest.send.${msg.id}.finished`);
   });
 };
 
