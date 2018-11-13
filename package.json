@@ -6,12 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "xcraft",
-    "fileserver",
-    "upload",
-    "chest"
-  ],
+  "keywords": ["xcraft", "fileserver", "upload", "chest"],
   "repository": {
     "type": "file",
     "url": "lib/xcraft-contrib-chest"
@@ -36,6 +31,6 @@
   "author": "Mathieu Schroeter",
   "license": "MIT",
   "devDependencies": {
-    "xcraft-dev-rules": "^0.2.0"
+    "xcraft-dev-rules": "^0.3.0"
   }
 }
