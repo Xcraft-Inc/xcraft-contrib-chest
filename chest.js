@@ -8,8 +8,8 @@ var cmd = {};
 /**
  * Start the chest server.
  */
-cmd.start = function(msg, response) {
-  const chestConfig = require('xcraft-core-etc')(null, response).load(
+cmd.start = function(msg, resp) {
+  const chestConfig = require('xcraft-core-etc')(null, resp).load(
     'xcraft-contrib-chest'
   );
 
@@ -17,7 +17,7 @@ cmd.start = function(msg, response) {
   var isRunning = false;
 
   if (fs.existsSync(chestConfig.pid)) {
-    response.log.warn('the chest server seems running');
+    resp.log.warn('the chest server seems running');
 
     isRunning = true;
     var pid = fs.readFileSync(chestConfig.pid, 'utf8');
@@ -26,7 +26,7 @@ cmd.start = function(msg, response) {
       process.kill(pid, 0);
     } catch (err) {
       if (err.code === 'ESRCH') {
-        response.log.warn(
+        resp.log.warn(
           'but the process can not be found, then we try to start it'
         );
         fs.unlinkSync(chestConfig.pid);
@@ -50,20 +50,20 @@ cmd.start = function(msg, response) {
       stdio: ['ignore', logout, logerr],
     });
 
-    response.log.verb('chest server PID: ' + chest.pid);
+    resp.log.verb('chest server PID: ' + chest.pid);
     fs.writeFileSync(chestConfig.pid, chest.pid);
 
     chest.unref();
   }
 
-  response.events.send(`chest.start.${msg.id}.finished`);
+  resp.events.send(`chest.start.${msg.id}.finished`);
 };
 
 /**
  * Stop the chest server.
  */
-cmd.stop = function(msg, response) {
-  const chestConfig = require('xcraft-core-etc')(null, response).load(
+cmd.stop = function(msg, resp) {
+  const chestConfig = require('xcraft-core-etc')(null, resp).load(
     'xcraft-contrib-chest'
   );
 
@@ -73,28 +73,28 @@ cmd.stop = function(msg, response) {
     fs.unlinkSync(chestConfig.pid);
   } catch (err) {
     if (err.code !== 'ENOENT') {
-      response.log.err(err);
+      resp.log.err(err);
     }
   }
 
-  response.events.send(`chest.stop.${msg.id}.finished`);
+  resp.events.send(`chest.stop.${msg.id}.finished`);
 };
 
 /**
  * Restart the chest server.
  */
-cmd.restart = function(msg, response) {
-  response.events.subscribe(`chest.start.${msg.id}.finished`, function() {
-    response.events.unsubscribe(`chest.start.${msg.id}.finished`);
-    response.events.send(`chest.restart.${msg.id}.finished`);
+cmd.restart = function(msg, resp) {
+  resp.events.subscribe(`chest.start.${msg.id}.finished`, function() {
+    resp.events.unsubscribe(`chest.start.${msg.id}.finished`);
+    resp.events.send(`chest.restart.${msg.id}.finished`);
   });
 
-  response.events.subscribe(`chest.stop.${msg.id}.finished`, function() {
-    response.events.unsubscribe(`chest.stop.${msg.id}.finished`);
-    response.command.send('chest.start');
+  resp.events.subscribe(`chest.stop.${msg.id}.finished`, function() {
+    resp.events.unsubscribe(`chest.stop.${msg.id}.finished`);
+    resp.command.send('chest.start');
   });
 
-  response.command.send('chest.stop');
+  resp.command.send('chest.stop');
 };
 
 /**
@@ -102,8 +102,8 @@ cmd.restart = function(msg, response) {
  *
  * @param {Object} msg
  */
-cmd.send = function(msg, response) {
-  const chestConfig = require('xcraft-core-etc')(null, response).load(
+cmd.send = function(msg, resp) {
+  const chestConfig = require('xcraft-core-etc')(null, resp).load(
     'xcraft-contrib-chest'
   );
 
@@ -112,15 +112,15 @@ cmd.send = function(msg, response) {
 
   file = path.resolve(file);
 
-  response.log.info('send ' + file + ' to the chest');
+  resp.log.info('send ' + file + ' to the chest');
 
   var chestClient = require('./lib/client.js');
-  chestClient.upload(file, chestConfig, response, function(error) {
+  chestClient.upload(file, chestConfig, resp, function(error) {
     if (error) {
-      response.log.err(error);
+      resp.log.err(error);
     }
 
-    response.events.send(`chest.send.${msg.id}.finished`);
+    resp.events.send(`chest.send.${msg.id}.finished`);
   });
 };
 
