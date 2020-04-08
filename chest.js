@@ -8,7 +8,7 @@ var cmd = {};
 /**
  * Start the chest server.
  */
-cmd.start = function(msg, resp) {
+cmd.start = function (msg, resp) {
   const chestConfig = require('xcraft-core-etc')(null, resp).load(
     'xcraft-contrib-chest'
   );
@@ -62,7 +62,7 @@ cmd.start = function(msg, resp) {
 /**
  * Stop the chest server.
  */
-cmd.stop = function(msg, resp) {
+cmd.stop = function (msg, resp) {
   const chestConfig = require('xcraft-core-etc')(null, resp).load(
     'xcraft-contrib-chest'
   );
@@ -83,13 +83,13 @@ cmd.stop = function(msg, resp) {
 /**
  * Restart the chest server.
  */
-cmd.restart = function(msg, resp) {
-  resp.events.subscribe(`chest.start.${msg.id}.finished`, function() {
+cmd.restart = function (msg, resp) {
+  resp.events.subscribe(`chest.start.${msg.id}.finished`, function () {
     resp.events.unsubscribe(`chest.start.${msg.id}.finished`);
     resp.events.send(`chest.restart.${msg.id}.finished`);
   });
 
-  resp.events.subscribe(`chest.stop.${msg.id}.finished`, function() {
+  resp.events.subscribe(`chest.stop.${msg.id}.finished`, function () {
     resp.events.unsubscribe(`chest.stop.${msg.id}.finished`);
     resp.command.send('chest.start');
   });
@@ -102,7 +102,7 @@ cmd.restart = function(msg, resp) {
  *
  * @param {Object} msg
  */
-cmd.send = function(msg, resp) {
+cmd.send = function (msg, resp) {
   const chestConfig = require('xcraft-core-etc')(null, resp).load(
     'xcraft-contrib-chest'
   );
@@ -115,7 +115,7 @@ cmd.send = function(msg, resp) {
   resp.log.info('send ' + file + ' to the chest');
 
   var chestClient = require('./lib/client.js');
-  chestClient.upload(file, chestConfig, resp, function(error) {
+  chestClient.upload(file, chestConfig, resp, function (error) {
     if (error) {
       resp.log.err(error);
     }
@@ -129,7 +129,7 @@ cmd.send = function(msg, resp) {
  *
  * @returns {Object} The list and definitions of commands.
  */
-exports.xcraftCommands = function() {
+exports.xcraftCommands = function () {
   return {
     handlers: cmd,
     rc: {

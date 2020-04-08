@@ -14,7 +14,7 @@ module.exports = [
     type: 'input',
     name: 'port',
     message: 'listening port [client or server]:',
-    validate: function(value) {
+    validate: function (value) {
       return /^[0-9]{1,}$/.test(value);
     },
     default: '443',
